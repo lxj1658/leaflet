@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/main';
-import home from '@/components/homeView/home';
 import Loading from '@/components/loading/Loading';
-import MapView from '@/components/mapView/MapView';
-
+// import MapView from '@/components/mapView/MapView';
+import GetRoute from '@/components/getRoute/GetRoute';
+import RouterList from '@/components/getRoute/RouterList';
+import GetRouterButton from '@/components/Button/GetRouterButton';
 Vue.use(Router);
 
 let router =  new Router({
@@ -12,26 +13,27 @@ let router =  new Router({
   routes: [
     {
       path: '/',
-      name: 'Loading',
-      component: Loading,
-    },
-    // {
-    //   path: '/map',
-    //   name: 'MapView',
-    //   component: MapView,
-    // },
-    {
-      path: '/main',
       name: 'Main',
       component: Main,
-      // children:[
-      //   {
-      //     path:'/main/home',
-      //     name:'home',
-      //     component:home,
-      //   }
-      //   ]
-    }
+      children:[
+        {
+          path:'/main/getRoute',
+          name:'GetRoute',
+          component:GetRoute,
+        },
+        {
+          path:'/main/getRouterButton',
+          name:'GetRouterButton',
+          component:GetRouterButton,
+        },
+        {
+          path:'/main/RouterList',
+          name:'RouterList',
+          component:RouterList,
+        }
+      ]
+    },
+    
   ]
 });
 

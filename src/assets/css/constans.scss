@@ -1,0 +1,46 @@
+$page-bg-color : #F2F2F2;
+$theme-color: #17445E;
+$header-height: 0.5*100px;
+$search-button-height: 0.4*100px;
+$search-button-bg-color: #F0F0F0;
+$list-divided-color: #E0E0E0;
+$group-list-item-height: 0.7*100px;
+$function-bar-spread: 2*100px;
+$input-bar-height: 0.5*100px;
+$function-choose-height: 2.5*100px;
+
+$mine-bubble-bg-color: #63FF1C;
+$mine-bubble-divider-color: #A8A8A8;
+
+$other-bubble-bg-color: white;
+$other-bubble-divider-color: #A8A8A8;
+
+$function-choose-sign-color: #6F7378;
+
+@mixin pr-border-radius($radius: 0) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin pr-transform($deg: 0) {
+  transform:rotate($deg);
+  -ms-transform:rotate($deg); 	/* IE 9 */
+  -moz-transform:rotate($deg); 	/* Firefox */
+  -webkit-transform:rotate($deg); /* Safari 和 Chrome */
+  -o-transform:rotate($deg);
+}
+
+@mixin pr-user-select {
+  -moz-user-select:none; /*火狐*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -ms-user-select:none; /*IE10*/
+  -khtml-user-select:none; /*早期浏览器*/
+  user-select:none;
+}
