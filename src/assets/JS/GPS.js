@@ -1,4 +1,4 @@
-var GPS = {  
+export default{  
     PI : 3.14159265358979324,  
     x_pi : 3.14159265358979324 * 3000.0 / 180.0,  
     delta : function (lat, lon) {  

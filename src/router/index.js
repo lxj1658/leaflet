@@ -13,6 +13,12 @@ let router =  new Router({
   routes: [
     {
       path: '/',
+      name: 'Loading',
+      component: Loading,
+      meta: { scrollToTop: true }
+    },
+    {
+      path: '/main',
       name: 'Main',
       component: Main,
       children:[
@@ -25,6 +31,7 @@ let router =  new Router({
           path:'/main/getRouterButton',
           name:'GetRouterButton',
           component:GetRouterButton,
+          meta: { scrollToTop: true }
         },
         {
           path:'/main/RouterList',
@@ -32,9 +39,14 @@ let router =  new Router({
           component:RouterList,
         }
       ]
-    },
-    
-  ]
+    },  
+  ],
+  scrollBehavior(to,from,savedPosition) {
+    return {
+      x:0,
+      y:0
+    }
+  }
 });
 
 export default router;
