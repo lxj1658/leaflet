@@ -60,11 +60,11 @@
         //     console.log(latlngs);
             
         //画出路线图
-        console.log(this.$store.state.routesLatLng);
-        if(this.$store.state.routesLatLng.length != 0){
-          var polyline = L.polyline(this.$store.state.routesLatLng, {color: 'red'}).addTo(map);
-          map.fitBounds(polyline.getBounds());
-        }
+        // console.log(this.$store.state.routesLatLng);
+        // if(this.$store.state.routesLatLng.length != 0){
+        //   var polyline = L.polyline(this.$store.state.routesLatLng[], {color: 'red'}).addTo(map);
+        //   map.fitBounds(polyline.getBounds());
+        // }
         
         //     var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
         //     map.fitBounds(polyline.getBounds());
@@ -98,6 +98,15 @@
       // 
       // var bmap = new BMap.Map("map");
       
+    },
+    watch: {  
+      // '$route' (to, from) {  
+      //   console.log(this.$store.state.routesLatLng);
+      //   if(this.$store.state.routesLatLng.length != 0){
+      //     var polyline = L.polyline(this.$store.state.routesLatLng[0], {color: 'red'}).addTo(map);
+      //     map.fitBounds(polyline.getBounds());
+      //   }
+      // } 
     }
   }
 </script>

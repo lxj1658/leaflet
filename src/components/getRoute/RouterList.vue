@@ -15,10 +15,10 @@
       </div>
     </div>
     <div class="center1">
-      <span style="position: absolute;left: 4%;width: 20%;top:40%">驾车</span>
-      <span style="position: absolute;left: 28%;width: 20%;top:40%">公交</span>
-      <span style="position: absolute;left: 52%;width: 20%;top:40%;color: blue">骑行</span>
-      <span style="position: absolute;left: 76%;width: 20%;top:40%">步行</span>
+      <span style="position: absolute;left: 4%;width: 20%;top:40%" id='drving' @click="choseDrving()">驾车</span>
+      <span style="position: absolute;left: 28%;width: 20%;top:40%" id='transit' @click="choseTransit()">公交</span>
+      <span style="position: absolute;left: 52%;width: 20%;top:40%" id='riding' @click="choseRiding()">骑行</span>
+      <span style="position: absolute;left: 76%;width: 20%;top:40%" id='walking' @click="choseWalking()">步行</span>
     </div>
     <div class="bottom1" id="bottom1">
       <div v-if="open">
@@ -28,8 +28,8 @@
         <i class="el-icon-arrow-down" @click="closeList()" style="z-index: 1010"></i>
         <div style="background-color: white;z-index: 1010">
             <div v-for="item in routes" style="overflow: scroll;">
-              <div style="width: 100%;height: 50px;display: flex;margin-top: 20px;margin-left: 5px;margin-right: 10px">
-                <div style="width: 80%;height: 100%;text-align: center; ">
+              <div style="width: 100%;height: 50px;display: flex;margin-top: 20px;margin-left: 10px;margin-right: 10px">
+                <div style="height: 100%;text-align: center; ">
                 <span>{{ item.name }}</span>
                 </div>
               </div>
@@ -87,7 +87,47 @@
         console.log(this.$store.state.routes)
         console.log(this.$store.state.startPosition);
         console.log(this.$store.state.endPosition);
-      }
+      },
+      choseDrving(){
+        var drving = document.getElementById('drving');
+        var transit = document.getElementById('transit');
+        var riding = document.getElementById('riding');
+        var walking = document.getElementById('walking');
+        drving.style['color'] = 'blue';
+        transit.style['color'] = 'black';
+        riding.style['color'] = 'black';
+        walking.style['color'] = 'black';
+      },
+      choseTransit(){
+        var drving = document.getElementById('drving');
+        var transit = document.getElementById('transit');
+        var riding = document.getElementById('riding');
+        var walking = document.getElementById('walking');
+        drving.style['color'] = 'black';
+        transit.style['color'] = 'blue';
+        riding.style['color'] = 'black';
+        walking.style['color'] = 'black';
+      },
+      choseRiding(){
+        var drving = document.getElementById('drving');
+        var transit = document.getElementById('transit');
+        var riding = document.getElementById('riding');
+        var walking = document.getElementById('walking');
+        drving.style['color'] = 'black';
+        transit.style['color'] = 'black';
+        riding.style['color'] = 'blue';
+        walking.style['color'] = 'black';
+      },
+      choseWalking(){
+        var drving = document.getElementById('drving');
+        var transit = document.getElementById('transit');
+        var riding = document.getElementById('riding');
+        var walking = document.getElementById('walking');
+        drving.style['color'] = 'black';
+        transit.style['color'] = 'black';
+        riding.style['color'] = 'black';
+        walking.style['color'] = 'blue';
+      },
      
     },
     mounted() {
@@ -147,6 +187,11 @@
       '$route' (to, from) {  
         this.start1 = this.$store.state.startPosition;
         this.end1 = this.$store.state.endPosition;
+        console.log(this.$store.state.routesLatLng);
+        if(this.$store.state.routesLatLng.length != 0){
+          var polyline = L.polyline(this.$store.state.routesLatLng[0], {color: 'red'}).addTo(map);
+          map.fitBounds(polyline.getBounds());
+        }
       } 
     }
 
