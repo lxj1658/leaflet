@@ -1,5 +1,12 @@
 <template>
   <div>
+    <!-- <div id="search">
+      <el-input
+        placeholder="查找地址"
+        prefix-icon="el-icon-search"
+        v-model="input21">
+      </el-input>
+    </div> -->
     <div id="navButton">
       <router-link to="/main/getRoute">
         <el-button id="startNaviBtn" @click="clickBtn">
@@ -32,6 +39,15 @@
     position: absolute;
     bottom: 5%;
     right: 10%;
+    z-index: 1010;
+  }
+
+  #search{
+    position: absolute;
+    top: 2%;
+    right: 5%;
+    width: 80%;
+    background-color: white;
     z-index: 1010;
   }
 

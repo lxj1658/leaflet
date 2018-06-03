@@ -14,19 +14,17 @@
         <i class="el-icon-sort" style="position: absolute;top: 35%"></i>
       </div>
     </div>
-    
     <div class="bottom">
       <div v-for="item in historySites" style="overflow: scroll;">
-        <div style="width: 100%;height: 50px;display: flex;margin-top: 20px;margin-left: 5px;
-        margin-right: 10px" @click="chose(item)">
+        <div style="width: 90%;height: 50px;display: flex;margin-top: 20px;margin-left: 5px;margin-right: 20px" @click="chose(item)">
           <i class="el-icon-time" style="width: 10%;height: 100%;margin-top: 1%"></i>
-          <div style="height: 100%;text-align: center; ">
-            <span>{{ item.name }}</span>
+          <div style="height: 100%;font-size: 15px">
+            <span>{{ item.start }} → {{item.end}}</span>
           </div>
-          <i class="el-icon-d-arrow-right" style="height: 100%;margin-top: 1%;margin-left:3%;margin-right: 3%"></i>
-          <div style="height: 100%;text-align: center; ">
-            <span>{{ item.name }}</span>
-          </div>
+          <!-- <i class="el-icon-d-arrow-right" style="height: 100%;margin-top: 1%;margin-left:3%;margin-right: 3%"></i>
+          <div style="height: 100%;white-space:nowrap;font-size: 15px ">
+            <span>{{ item.end }}</span>
+          </div> -->
         </div>
         <div style="width: 100%;height: 1px;background-color: #f4f4f4"></div>
       </div>
@@ -95,9 +93,9 @@
       return {
         start:'我的位置',
         end:'',
-        historySites:[{name:'合肥工业大学'},{name:'合肥南站'},{name:'安徽大学'},{name:'合肥火车站'},{name:'大润发(中环店)'}],
+        historySites:this.$store.state.historySites,
         sites:this.$store.state.historyStart,
-        collections:[{name:'合肥工业大学'},{name:'合肥南站'}],
+        collections:this.$store.state.collections,
         positionType:'',
         showPosition:true,
         collection:true,
@@ -147,33 +145,85 @@
         this.collection = true;
       },
       choseOnMap(){
+        this.$router.push('/main/ChosePosition');
 
       },
       chose(value){
+
+      // var fs = require('fs');
+         // var Client = require('../../../node_modules/mysql').Client;
+        
+        // var client = new Client();
+        // client.user = 'root';
+        // client.password = '199678xj';
+        // console.log("Connecting to MySQL")
+        
+        // var connection = mysql.createConnection({
+        //   host: 'localhost',  //主机
+        //   user: 'root',    //MySQL认证用户名
+        //   password: '199678xj',  //MySQL认证用户密码
+        //   database: 'leaflet',
+        //   port: '3306'     //端口号
+        // });
+        // console.log(connection);
+
+
         console.log("chose");
-        this.end = value.name;
+        this.start = value.start;
+        this.end = value.end;
         this.$store.commit(mutationTypes.SET_STARTPOSITION,this.start);
         this.$store.commit(mutationTypes.SET_ENDPOSITION,this.end);
         console.log(this.$store.state.startPosition);
         console.log(this.$store.state.endPosition);
+        var distance;//距离(从walking中获取,为下一步自动选择路线做准备)
         var startPosition;
         var endPosition;
-        // let url='http://api.map.baidu.com/direction/v2/riding?origin=31.773582,117.201429&destination=31.780970,117.209208&ak=nLpN5iKztxIWsPqgwsyrruUG';
-        let url_walking = 'http://api.map.baidu.com/direction/v1?mode=walking&origin=合肥工业大学(屯溪路校区)&destination=安徽大学(磬苑校区)&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-        let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin=合肥工业大学(屯溪路校区)&destination=安徽大学(磬苑校区)&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-        let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin=合肥工业大学(屯溪路校区)&destination=安徽大学(磬苑校区)&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-        let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin=合肥工业大学(屯溪路校区)&destination=安徽大学(磬苑校区)&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
         
+        /**
+         * 请求：
+         * walking：步行
+         * driving：驾车
+         * riding：骑行
+         * transit：公交
+         */
+        let url_walking = 'http://api.map.baidu.com/direction/v1?mode=walking&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+        let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+        let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+        let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+        // let url = 'http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=31.780970,117.209208&output=json&pois=1&ak=nLpN5iKztxIWsPqgwsyrruUG'
+        // let url2 = 'http://api.map.baidu.com/geocoder/v2/?address=合肥南站&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG&callback=showLocation'
+
+        // this.$http.jsonp(url,{},{
+        //   headers:{},
+        //   emulateJson:true}).then((response) => {
+        //     var movie = response.data;
+        //     console.log("===========逆地理检索===========")
+        //     console.log(movie);
+        //   })
+
+        //   this.$http.jsonp(url2,{},{
+        //   headers:{},
+        //   emulateJson:true}).then((response) => {
+        //     var movie = response.data;
+        //     console.log("===========逆地理检索_合肥南站===========")
+        //     console.log(movie);
+        //   })
+
         // 发送请求
-        
-        var x,y = 0.0;
+        /**
+         * walking
+         * 步行线路请求
+         */
         this.$http.jsonp(url_walking,{},{
           headers:{},
           emulateJson:true}).then((response) => {
+            this.$store.commit(mutationTypes.DEL_WALKING_ROUTESLATLNG);
+            this.$store.commit(mutationTypes.DEL_WALKING_ROUTES);
             var movie = response.data;
             var latlngs = [];
-            // console.log("=======")
-            // console.log(movie);
+            console.log("=======walking=========")
+            console.log(movie);
+            distance = movie.result.routes[0].distance;
             var path = [];
             path = movie.result.routes[0].steps;
             //路线信息
@@ -187,10 +237,10 @@
                 }
                 var string = instruct;
                 
-                this.$store.commit(mutationTypes.SET_ROUTES, {name:string});
+                this.$store.commit(mutationTypes.SET_WALKING_ROUTES, {name:string});
               }
 
-          //路径信息(经纬度)
+            //路径信息(经纬度)
             function changeToLatLng(path){
               var latlng = path.split(",");
               var lat = Number(latlng[1]);
@@ -198,25 +248,118 @@
               var a = GPS.bd_decrypt(lat,lng);
               return [a.lat,a.lon];
             }
-
+            
             for(let i=0;i<path.length;i++){
               var pathI = path[i].path.split(";");
               for(let j=0;j<pathI.length;j++){
                 var latlng = changeToLatLng(pathI[j])
-                // this.$store.commit(mutationTypes.SET_ROUTESLATLNG,latlng);
+                
+                this.$store.commit(mutationTypes.SET_WALKING_ROUTESLATLNG,latlng);
+              }
+            }
+          })
+
+        /**
+         * driving
+         * 驾车线路请求
+         */
+        this.$http.jsonp(url_driving,{},{
+          headers:{},
+          emulateJson:true}).then((response) => {
+            this.$store.commit(mutationTypes.DEL_DRIVING_ROUTESLATLNG);
+            this.$store.commit(mutationTypes.DEL_DRIVING_ROUTES);
+            var movie = response.data;
+            console.log("======driving========");
+            console.log(movie);
+            var steps = movie.result.routes[0].steps;
+            for(var i=0;i<steps.length;i++){
+              //路线描述信息
+              var instruct = steps[i].instructions;
+              while(instruct.indexOf('<b>') >= 0){
+                  instruct = instruct.replace('<b>','');
+              }
+              while(instruct.indexOf("</b>") >= 0){
+                  instruct = instruct.replace('</b>','');
+              }
+              var string = instruct;
+                
+              this.$store.commit(mutationTypes.SET_DRIVING_ROUTES, {name:string});
+
+              //路线经纬度
+              function changeToLatLng(path){
+              var latlng = path.split(",");
+              var lat = Number(latlng[1]);
+              var lng = Number(latlng[0]);
+              var a = GPS.bd_decrypt(lat,lng);
+              return [a.lat,a.lon];
+              }
+              
+              var pathI = steps[i].path.split(";");
+              for(let j=0;j<pathI.length;j++){
+                var latlng = changeToLatLng(pathI[j])
+                
+                this.$store.commit(mutationTypes.SET_DRIVING_ROUTESLATLNG,latlng);
+                // latlngs.push(changeToLatLng(pathI[j]));
+              }
+            }           
+          })
+
+        /**
+         * riding
+         * 驾车线路请求
+         */
+        this.$http.jsonp(url_riding,{},{
+          headers:{},
+          emulateJson:true}).then((response) => {
+            this.$store.commit(mutationTypes.DEL_RIDING_ROUTESLATLNG);
+            this.$store.commit(mutationTypes.DEL_RIDING_ROUTES);
+            var movie = response.data;
+            console.log("======riding========");
+            console.log(movie);
+            var steps = movie.result.routes[0].steps;
+            for(var i=0;i<steps.length;i++){
+              //路线描述信息
+              var instruct = steps[i].instructions;
+              while(instruct.indexOf('<b>') >= 0){
+                  instruct = instruct.replace('<b>','');
+              }
+              while(instruct.indexOf("</b>") >= 0){
+                  instruct = instruct.replace('</b>','');
+              }
+              var string = instruct;
+                
+              this.$store.commit(mutationTypes.SET_RIDING_ROUTES, {name:string});
+
+              //路线经纬度
+              function changeToLatLng(path){
+              var latlng = path.split(",");
+              var lat = Number(latlng[1]);
+              var lng = Number(latlng[0]);
+              var a = GPS.bd_decrypt(lat,lng);
+              return [a.lat,a.lon];
+              }
+              
+              var pathI = steps[i].path.split(";");
+              for(let j=0;j<pathI.length;j++){
+                var latlng = changeToLatLng(pathI[j])
+                
+                this.$store.commit(mutationTypes.SET_RIDING_ROUTESLATLNG,latlng);
                 // latlngs.push(changeToLatLng(pathI[j]));
               }
             }
-            // var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-            // map.fitBounds(polyline.getBounds());
-
           })
 
+        /**
+         * transit
+         * 公交线路请求
+         */
         this.$http.jsonp(url_transit,{},{
           headers:{},
           emulateJson:true}).then((response) => {
+            this.$store.commit(mutationTypes.DEL_TRANSIT_ROUTES);
+            this.$store.commit(mutationTypes.DEL_TRANSIT_ROUTESLATLNG);
             var movie = response.data;
-            console.log("=======")
+            console.log("=======transit======")
             console.log(movie);
             var routes_transit = [];
             routes_transit = movie.result.routes;
@@ -262,12 +405,35 @@
               }
               return result
             }
+            function setTip(tip){
+              if(tip === 0){
+                return ""
+              }else if(tip === 1){
+                return "时间短"
+              }else if(tip === 2){
+                return "少换乘"
+              }else if(tip === 3){
+                return "少步行"
+              }else if(tip === 4){
+                return "上车站离起点近"
+              }else if(tip === 5){
+                return "上车站离终点近"
+              }else if(tip === 6){
+                return "直达"
+              }else if(tip === 7){
+                return "无堵车风险"
+              }else if(tip === 8){
+                return "堵车风险小"
+              }
+            }
+
             for(var i=0;i<routes_transit.length;i++){
               var path = routes_transit[i].scheme[0];
               var time = setTime(path.duration);
               var price = setPrice(path.price);
+              var tip = setTip(path.tip_label_type);
               var bus = [];
-              var string = [];
+              var string = {time:time,price:price,bus:"",tip:tip,name:[]};
               var latlng=[];
               for(var j=0;j<path.steps.length;j++){
                 if(path.steps[j][0].vehicle){
@@ -287,7 +453,8 @@
                 if(j === path.steps.length - 1){
                   instruct += '到达终点';
                 }
-                string.push(instruct);
+                string.name.push({name:instruct});
+                
                 //路线经纬度
                 function changeToLatLng(path){
                   var latlng = path.split(",");
@@ -302,19 +469,42 @@
                   latlng.push(latlngI);
                 }
               }
-              console.log(time);
-              console.log(price);
-              console.log(bus);
-              console.log(string);
-              console.log(latlng);
-              this.$store.commit(mutationTypes.SET_ROUTESLATLNG,latlng);
+              // console.log(time);
+              // console.log(price);
+              // console.log(bus);
+              // console.log(string);
+              // console.log(latlng);
+              console.log("bususususuusususu")
+              console.log(bus)
+              if(bus.length < 2){
+                string.bus = bus[0];
+              } else {
+                var string_bus = "";
+                for(var k=0;k<bus.length;k++){
+                  if(k < bus.length-1){
+                    string_bus += bus[k];
+                    string_bus += "/"; 
+                  } else {
+                    string_bus += bus[k];
+                  }
+                }
+                string.bus = string_bus;
+              }
+              console.log(string.bus)
+              console.log(this.$store.state.transit_routes)
+              
+              this.$store.commit(mutationTypes.SET_TRANSIT_ROUTESLATLNG,latlng);
+              this.$store.commit(mutationTypes.SET_TRANSIT_ROUTES, {string});
             }
 
           })
+        // var polyline = L.polyline(this.$store.state.driving_routesLatLng, {color: 'red'}).addTo(map);
+        // map.fitBounds(polyline.getBounds());
         this.$router.replace('/main/RouterList')
       },
       show_chose(value){
         let that = this;
+        var distance;
         if(this.positionType === 'start'){
           this.start = value.name;
           this.collection = true;
@@ -334,39 +524,47 @@
           that.$store.commit(mutationTypes.DEL_ENDPOSITION);
           that.$store.commit(mutationTypes.SET_ENDPOSITION,this.end);
 
+          /**
+           * 请求：
+           * walking：步行
+           * driving：驾车
+           * riding：骑行
+           * transit：公交
+           */
           let url_walking = 'http://api.map.baidu.com/direction/v1?mode=walking&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
           let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
           let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
           let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-          
-          // let url = 'http://api.map.baidu.com/location/ip?&ak=nLpN5iKztxIWsPqgwsyrruUG&coor=bd09ll'
-          // 发送请求
-          var path = [];
-          var x,y = 0.0;
+        
+          /**
+           * walking
+           * 步行线路请求
+           */
           this.$http.jsonp(url_walking,{},{
             headers:{},
             emulateJson:true}).then((response) => {
               var movie = response.data;
               var latlngs = [];
-              console.log("=======路线json数据：")
+              console.log("=======walking=========")
               console.log(movie);
+              distance = movie.result.routes[0].distance;
+              var path = [];
               path = movie.result.routes[0].steps;
               //路线信息
               for(var i=0;i<path.length;i++){
-                var instruct = path[i].instructions;
-                while(instruct.indexOf("<b>") >= 0){
-                  instruct = instruct.replace('<b>','');
+                  var instruct = path[i].instructions;
+                  while(instruct.indexOf("<b>") >= 0){
+                    instruct = instruct.replace('<b>','');
+                  }
+                  while(instruct.indexOf("</b>") >= 0){
+                    instruct = instruct.replace('</b>','');
+                  }
+                  var string = instruct;
+                  
+                  this.$store.commit(mutationTypes.SET_WALKING_ROUTES, {name:string});
                 }
-                while(instruct.indexOf("</b>") >= 0){
-                  instruct = instruct.replace('</b>','');
-                }
-                var string = instruct;
-                console.log(string);
-                this.$store.commit(mutationTypes.SET_ROUTES, {name:string});
-              }
 
-            //路径信息(经纬度)
-              let path0 = path[0].path.split(";")
+              //路径信息(经纬度)
               function changeToLatLng(path){
                 var latlng = path.split(",");
                 var lat = Number(latlng[1]);
@@ -379,16 +577,241 @@
                 var pathI = path[i].path.split(";");
                 for(let j=0;j<pathI.length;j++){
                   var latlng = changeToLatLng(pathI[j])
-                  this.$store.commit(mutationTypes.SET_ROUTESLATLNG,latlng);
+                  this.$store.commit(mutationTypes.SET_WALKING_ROUTESLATLNG,latlng);
+                }
+              }
+            })
 
+          /**
+           * driving
+           * 驾车线路请求
+           */
+          this.$http.jsonp(url_driving,{},{
+            headers:{},
+            emulateJson:true}).then((response) => {
+              var movie = response.data;
+              console.log("======driving========");
+              console.log(movie);
+              var steps = movie.result.routes[0].steps;
+              for(var i=0;i<steps.length;i++){
+                //路线描述信息
+                var instruct = steps[i].instructions;
+                while(instruct.indexOf('<b>') >= 0){
+                    instruct = instruct.replace('<b>','');
+                }
+                while(instruct.indexOf("</b>") >= 0){
+                    instruct = instruct.replace('</b>','');
+                }
+                var string = instruct;
+                  
+                this.$store.commit(mutationTypes.SET_DRIVING_ROUTES, {name:string});
+
+                //路线经纬度
+                function changeToLatLng(path){
+                var latlng = path.split(",");
+                var lat = Number(latlng[1]);
+                var lng = Number(latlng[0]);
+                var a = GPS.bd_decrypt(lat,lng);
+                return [a.lat,a.lon];
+                }
+
+                var pathI = steps[i].path.split(";");
+                for(let j=0;j<pathI.length;j++){
+                  var latlng = changeToLatLng(pathI[j])
+                  this.$store.commit(mutationTypes.SET_DRIVING_ROUTESLATLNG,latlng);
+                  // latlngs.push(changeToLatLng(pathI[j]));
+                }
+              }           
+            })
+
+          /**
+           * riding
+           * 驾车线路请求
+           */
+          this.$http.jsonp(url_riding,{},{
+            headers:{},
+            emulateJson:true}).then((response) => {
+              var movie = response.data;
+              console.log("======riding========");
+              console.log(movie);
+              var steps = movie.result.routes[0].steps;
+              for(var i=0;i<steps.length;i++){
+                //路线描述信息
+                var instruct = steps[i].instructions;
+                while(instruct.indexOf('<b>') >= 0){
+                    instruct = instruct.replace('<b>','');
+                }
+                while(instruct.indexOf("</b>") >= 0){
+                    instruct = instruct.replace('</b>','');
+                }
+                var string = instruct;
+                  
+                this.$store.commit(mutationTypes.SET_RIDING_ROUTES, {name:string});
+
+                //路线经纬度
+                function changeToLatLng(path){
+                var latlng = path.split(",");
+                var lat = Number(latlng[1]);
+                var lng = Number(latlng[0]);
+                var a = GPS.bd_decrypt(lat,lng);
+                return [a.lat,a.lon];
+                }
+
+                var pathI = steps[i].path.split(";");
+                for(let j=0;j<pathI.length;j++){
+                  var latlng = changeToLatLng(pathI[j])
+                  this.$store.commit(mutationTypes.SET_RIDING_ROUTESLATLNG,latlng);
                   // latlngs.push(changeToLatLng(pathI[j]));
                 }
               }
-              // var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-              // map.fitBounds(polyline.getBounds());
-
             })
-          that.$router.push('/main/RouterList')
+
+          /**
+           * transit
+           * 公交线路请求
+           */
+          this.$http.jsonp(url_transit,{},{
+            headers:{},
+            emulateJson:true}).then((response) => {
+              var movie = response.data;
+              console.log("=======transit======")
+              console.log(movie);
+              var routes_transit = [];
+              routes_transit = movie.result.routes;
+              function setTime(time){
+                var result = '';
+                var hour=0,minute=0;
+                if(time >= 3600){
+                  hour = parseInt(time/3600);
+                  time = time%3600;
+                  minute = parseInt(time/60);
+                } else if(time >= 60 && time < 3600){
+                  hour = 0;
+                  minute = parseInt(time/60);
+                }
+                if(hour === 0 && minute != 0){
+                  result = minute + '分钟'
+                }else if(minute === 0 && hour != 0){
+                  result = hour + '小时'
+                }else if(hour != 0 && minute != 0){
+                  result = hour + '小时' + minute + '分'
+                }else if (hour===0 && minute ===0){
+                  console.log('时间获取错误==============');
+                }
+                return result;
+              }
+              function setPrice(price){
+                var result;
+                var yuan=0,jiao=0;
+                if(price >= 100){
+                  yuan = parseInt(price/100);
+                  price = price % 100;
+                  jiao = parseInt(price/10);
+                } else {
+                  yuan = 0;
+                  jiao = parseInt(price/10);
+                }
+                if(yuan === 0 && jiao != 0){
+                  result = jiao + '角';
+                }else if(yuan != 0 && jiao === 0){
+                  result = yuan + '元';
+                }else if (yuan !=0 && jiao != 0){
+                  result = yuan + '元' + jiao + '角';
+                }
+                return result
+              }
+              function setTip(tip){
+                if(tip === 0){
+                  return ""
+                }else if(tip === 1){
+                  return "时间短"
+                }else if(tip === 2){
+                  return "少换乘"
+                }else if(tip === 3){
+                  return "少步行"
+                }else if(tip === 4){
+                  return "上车站离起点近"
+                }else if(tip === 5){
+                  return "上车站离终点近"
+                }else if(tip === 6){
+                  return "直达"
+                }else if(tip === 7){
+                  return "无堵车风险"
+                }else if(tip === 8){
+                  return "堵车风险小"
+                }
+              }
+              for(var i=0;i<routes_transit.length;i++){
+                var path = routes_transit[i].scheme[0];
+                var time = setTime(path.duration);
+                var price = setPrice(path.price);
+                var tip = setTip(path.tip_label_type);
+                var bus = [];
+                var string = {time:time,price:price,bus:"",tip:tip,name:[]};
+                var latlng=[];
+                for(var j=0;j<path.steps.length;j++){
+                  if(path.steps[j][0].vehicle){
+                    bus.push(path.steps[j][0].vehicle.name);
+                  }
+                  //路线描述信息
+                  var instruct = path.steps[j][0].stepInstruction;
+                  while(instruct.indexOf('<font color="#313233">') >= 0){
+                    instruct = instruct.replace('<font color="#313233">','');
+                  }
+                  while(instruct.indexOf("</font>") >= 0){
+                    instruct = instruct.replace('</font>','');
+                  }
+                  if(path.steps[j][0].end_address){
+                    instruct += '到达'+path.steps[j][0].end_address;
+                  }
+                  if(j === path.steps.length - 1){
+                    instruct += '到达终点';
+                  }
+                  string.name.push(instruct);
+                  
+                  //路线经纬度
+                  function changeToLatLng(path){
+                    var latlng = path.split(",");
+                    var lat = Number(latlng[1]);
+                    var lng = Number(latlng[0]);
+                    var a = GPS.bd_decrypt(lat,lng);
+                    return [a.lat,a.lon];
+                  }
+                  var pathI = path.steps[j][0].path.split(";");
+                  for(let j=0;j<pathI.length;j++){
+                    var latlngI = changeToLatLng(pathI[j])
+                    latlng.push(latlngI);
+                  }
+                }
+                // console.log(time);
+                // console.log(price);
+                // console.log(bus);
+                // console.log(string);
+                // console.log(latlng);
+                console.log("bususususuusususu")
+                console.log(bus)
+                if(bus.length < 2){
+                  string.bus = bus[0];
+                } else {
+                  var string_bus = "";
+                  for(var k=0;k<bus.length;k++){
+                    if(k < bus.length-1){
+                      string_bus += bus[k];
+                      string_bus += "/"; 
+                    } else {
+                      string_bus += bus[k];
+                    }
+                  }
+                  string.bus = string_bus;
+                }
+                console.log(string.bus)
+                console.log(this.$store.state.transit_routes)
+                this.$store.commit(mutationTypes.SET_TRANSIT_ROUTESLATLNG,latlng);
+                this.$store.commit(mutationTypes.SET_TRANSIT_ROUTES, {string});
+              }
+            })
+          
+          that.$router.replace('/main/RouterList')
         }
       },
       setStartPosition(){
@@ -422,8 +845,9 @@
         handler:function(val,oldval){
           let that = this;
           that.$store.commit(mutationTypes.DEL_STARTSITES);
-          var query = val
-          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query+'&region=合肥&city_limit=true&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG' 
+          var query = val;
+          console.log(query)
+          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query + '&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
           this.$http.jsonp(url,{},{
             headers:{},
             emulateJson:true}).then((response) =>{
@@ -445,7 +869,7 @@
           let that = this;
           that.$store.commit(mutationTypes.DEL_ENDSITES);
           var query = val
-          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query+'&region=合肥&city_limit=true&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG' 
+          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query+'&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
           this.$http.jsonp(url,{},{
             headers:{},
             emulateJson:true}).then((response) =>{
@@ -529,6 +953,7 @@
   bottom: 0px;
   width: 100%;
   background-color: white;
+  overflow-y: scroll;
 }
 .el-button--info{
   position: absolute;

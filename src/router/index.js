@@ -6,6 +6,7 @@ import Loading from '@/components/loading/Loading';
 import GetRoute from '@/components/getRoute/GetRoute';
 import RouterList from '@/components/getRoute/RouterList';
 import GetRouterButton from '@/components/Button/GetRouterButton';
+import ChosePosition from '@/components/Chose/ChosePosition';
 Vue.use(Router);
 
 let router =  new Router({
@@ -37,6 +38,11 @@ let router =  new Router({
           path:'/main/RouterList',
           name:'RouterList',
           component:RouterList,
+        },
+        {
+          path:'/main/ChosePosition',
+          name:'ChosePosition',
+          component:ChosePosition,
         }
       ]
     },  

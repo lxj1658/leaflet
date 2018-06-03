@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%;height: 100%;">
     <div class="head1">
       <div style="position: absolute;left: 5%;width: 15%;height: 100%" @click="fanhui()">
         <i class="el-icon-arrow-left" style="position: absolute;top: 35%"></i>
@@ -15,27 +15,58 @@
       </div>
     </div>
     <div class="center1">
-      <span style="position: absolute;left: 4%;width: 20%;top:40%" id='drving' @click="choseDrving()">驾车</span>
+      <span style="position: absolute;left: 4%;width: 20%;top:40%;color:blue" id='drving' @click="choseDrving()">驾车</span>
       <span style="position: absolute;left: 28%;width: 20%;top:40%" id='transit' @click="choseTransit()">公交</span>
       <span style="position: absolute;left: 52%;width: 20%;top:40%" id='riding' @click="choseRiding()">骑行</span>
       <span style="position: absolute;left: 76%;width: 20%;top:40%" id='walking' @click="choseWalking()">步行</span>
     </div>
     <div class="bottom1" id="bottom1">
-      <div v-if="open">
-        <i class="el-icon-arrow-up" @click="openList()" style="position: absolute;bottom:0px;z-index: 1010"></i>
-      </div>
-      <div v-else>
-        <i class="el-icon-arrow-down" @click="closeList()" style="z-index: 1010"></i>
-        <div style="background-color: white;z-index: 1010">
-            <div v-for="item in routes" style="overflow: scroll;">
-              <div style="width: 100%;height: 50px;display: flex;margin-top: 20px;margin-left: 10px;margin-right: 10px">
-                <div style="height: 100%;text-align: center; ">
-                <span>{{ item.name }}</span>
+      <!-- <el-button type="primary" style="position: absolute;bottom: 5%;right:5%;z-index: 1010;width: 30%" plain round>开始导航</el-button> -->
+      <div>
+        <div v-if="transit_chose">
+          <div style="background-color: white;z-index: 1010">
+            <div v-for="item in transit_routes" >
+              <div style="margin-top: 20px;margin-left: 10px;margin-right: 10px;" @click="choseTransitRoutes(item)">
+                <div v-if="item.string.tip">
+                  <div style="width:100px;height:25px;text-align: center;background-color: blue;color: white;border-radius: 3px">
+                    <span>{{ item.string.tip }}</span>
+                  </div>
                 </div>
-              </div>
-              <div style="width: 100%;height: 1px;background-color: #f4f4f4"></div>
+                <div v-else>
+                  <div style="width: 100%;">
+                  </div>
+                </div>
+                <div style=" ">
+                  <span>{{ item.string.time }}</span>
+                </div>
+                <el-button round size="mini" style="height: 30px;color:blue" disabled>{{item.string.bus}}</el-button>
+                <div>
+                  <span>{{ item.string.price }}</span>
+                </div>
+                </div>
+                <div style="width: 100%;height: 10px"></div>
+                <div style="width: 100%;height: 3px;background-color: #f4f4f4"></div>
             </div>
+          </div>
         </div>
+        <div v-else>
+          <div v-if="open">
+          <i class="el-icon-arrow-up" @click="openList()" style="position: absolute;bottom:0px;z-index: 1010"></i>
+          </div>
+          <div v-else>
+            <i class="el-icon-arrow-down" @click="closeList()" style="z-index: 1010;position: absolute;top:0px;"></i>
+            <div style="background-color: white;z-index: 1010">
+                <div v-for="item in routes" style="overflow: scroll;padding-right: 15px">
+                  <div style="width: 100%;height: 50px;display: flex;margin-top: 20px;margin-left: 10px;margin-right: 10px">
+                    <div style="height: 100%; ">
+                    <span>{{ item.name }}</span>
+                    </div>
+                  </div>
+                  <div style="width: 100%;height: 1px;background-color: #f4f4f4"></div>
+                </div>
+            </div>
+          </div>
+        </div> 
       </div>
     </div>
   </div>
@@ -52,7 +83,9 @@
         start1:'',
         end1:'',
         open:true,
-        routes:this.$store.state.routes,
+        routes:this.$store.state.driving_routes,
+        transit_chose:false,
+        transit_routes:this.$store.state.transit_routes,
       }
     },
     router: router,
@@ -89,6 +122,9 @@
         console.log(this.$store.state.endPosition);
       },
       choseDrving(){
+        this.transit_chose = false;
+        var bottom1 = document.getElementById('bottom1');
+        bottom1.style['z-index'] = null;
         var drving = document.getElementById('drving');
         var transit = document.getElementById('transit');
         var riding = document.getElementById('riding');
@@ -97,8 +133,13 @@
         transit.style['color'] = 'black';
         riding.style['color'] = 'black';
         walking.style['color'] = 'black';
+        this.routes = this.$store.state.driving_routes;
       },
       choseTransit(){
+        this.transit_chose = true;
+        var bottom1 = document.getElementById('bottom1');
+        console.log(bottom1);
+        bottom1.style['z-index'] = 1010;
         var drving = document.getElementById('drving');
         var transit = document.getElementById('transit');
         var riding = document.getElementById('riding');
@@ -107,8 +148,13 @@
         transit.style['color'] = 'blue';
         riding.style['color'] = 'black';
         walking.style['color'] = 'black';
+        console.log(this.$store.state.transit_routes);
+        this.routes = this.$store.state.transit_routes;
       },
       choseRiding(){
+        this.transit_chose = false;
+        var bottom1 = document.getElementById('bottom1');
+        bottom1.style['z-index'] = null;
         var drving = document.getElementById('drving');
         var transit = document.getElementById('transit');
         var riding = document.getElementById('riding');
@@ -117,8 +163,12 @@
         transit.style['color'] = 'black';
         riding.style['color'] = 'blue';
         walking.style['color'] = 'black';
+        this.routes = this.$store.state.riding_routes;
       },
       choseWalking(){
+        this.transit_chose = false;
+        var bottom1 = document.getElementById('bottom1');
+        bottom1.style['z-index'] = null;
         var drving = document.getElementById('drving');
         var transit = document.getElementById('transit');
         var riding = document.getElementById('riding');
@@ -127,57 +177,22 @@
         transit.style['color'] = 'black';
         riding.style['color'] = 'black';
         walking.style['color'] = 'blue';
+        this.routes = this.$store.state.walking_routes;
+      },
+      choseTransitRoutes(value){
+        console.log(value);
+        console.log(this.$store.state.driving_routes)
+        this.transit_chose = false;
+        var bottom1 = document.getElementById('bottom1');
+        bottom1.style['z-index'] = null;
+        this.routes = value.string.name;
       },
      
     },
     mounted() {
 
-      this.start1 = this.$store.state.startPosition;
-      this.end1 = this.$store.state.endPosition;
-      // console.log(this.$store.state.routesLatLng);
-      // var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-      // console.log(this.$store.state.routes)
-      //   let url='http://api.map.baidu.com/direction/v2/riding?origin=31.773582,117.201429&destination=31.780970,117.209208&ak=nLpN5iKztxIWsPqgwsyrruUG';
-      //   // 发送请求
-      //   var path = [];
-      //   var x,y = 0.0;
-      //   let that = this;
-      //   this.$http.jsonp(url,{},{
-      //     headers:{},
-      //     emulateJson:true}).then((response) => {
-      //       var movie = response.data;
-      //       var latlngs = [];
-      //       console.log("=======")
-      //       console.log(movie);
-      //       path = movie.result.routes[0].steps;
-      //       function directionChange(direction){
-      //         var num = Number(direction);
-      //         if(num>=0 && num <= 45 || num>=315&&num<=360){
-      //           return "北"
-      //         }else if(num >= 45 && num <= 135){
-      //           return "东"
-      //         }else if(num >= 135 && num <= 225){
-      //           return "南";
-      //         }else if(num >= 225 && num <= 315){
-      //           return "西"
-      //         }
-      //       }
-      //       for(var i=0;i<path.length;i++){
-      //         var dire = directionChange(path[i].direction)
-      //         var instruct = path[i].instructions;
-      //         console.log(instruct.indexOf("</"))
-      //         if(instruct.indexOf("<") >= 0){
-      //           instruct = "沿着" + instruct.slice(instruct.indexOf("<")+3);
-                
-      //         }
-      //         if(instruct.indexOf("</") >= 0){
-      //           instruct = instruct.replace('</b>','');
-      //         }
-      //         var string = "向"+dire+instruct+"后"+path[i].turn_type;
-      //         that.routes.push({name:string});
-      //         console.log(that.routes)
-      //       }
-      //     })
+      // this.start1 = this.$store.state.startPosition;
+      // this.end1 = this.$store.state.endPosition;
       
     },
     components: {
@@ -187,11 +202,12 @@
       '$route' (to, from) {  
         this.start1 = this.$store.state.startPosition;
         this.end1 = this.$store.state.endPosition;
-        console.log(this.$store.state.routesLatLng);
-        if(this.$store.state.routesLatLng.length != 0){
-          var polyline = L.polyline(this.$store.state.routesLatLng[0], {color: 'red'}).addTo(map);
-          map.fitBounds(polyline.getBounds());
-        }
+        console.log("this.$store.state.driving_routesLatLng=====")
+        console.log(this.$store.state.driving_routesLatLng);
+        // if(this.$store.state.driving_routesLatLng.length != 0){
+        //   var polyline = L.polyline(this.$store.state.driving_routesLatLng, {color: 'red'}).addTo(map);
+        //   map.fitBounds(polyline.getBounds());
+        // }
       } 
     }
 
@@ -216,16 +232,17 @@
   top: 16%;
   padding: 10px;
   width: 100%;
-  height: 5%;
+  height: 9%;
   z-index: 1010;
   background-color: white;
 }
 .bottom1 {
   position: absolute;
   display: inline;
-  height: 80%;
+  height: 75%;
   bottom: 0px;
   width: 100%;
+  overflow-y: scroll;
   /*z-index: 900*/
   /*background-color: white;*/
 }
@@ -236,4 +253,8 @@
 /*.startPoint .el-input__inner {
   color:black;
 }*/
+.el-button--primary.is-plain:hover {
+  border-radius: 30px
+}
+
 </style>
