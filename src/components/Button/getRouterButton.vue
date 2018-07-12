@@ -1,12 +1,12 @@
 <template>
   <div>
-    <!-- <div id="search">
+    <div id="search" @click="openSearch()">
       <el-input
         placeholder="查找地址"
         prefix-icon="el-icon-search"
         v-model="input21">
       </el-input>
-    </div> -->
+    </div>
     <div id="navButton">
       <router-link to="/main/getRoute">
         <el-button id="startNaviBtn" @click="clickBtn">
@@ -30,6 +30,9 @@
       clickBtn() {
         this.$router.push('/main/getRoute');
       },
+      openSearch(){
+        this.$router.push('/main/Search');
+      }
     },
   }
 </script>

@@ -14,6 +14,7 @@
 		mounted(){
 			var that = this;
 	     	var geolocation = new BMap.Geolocation();
+	     	geolocation.enableSDKLocation();
 	      	geolocation.getCurrentPosition(function(r){
 	        if(this.getStatus() === BMAP_STATUS_SUCCESS){
 		          var mk = new BMap.Marker(r.point);

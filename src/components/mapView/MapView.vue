@@ -41,7 +41,7 @@
         //             }).openTooltip();
 
 
-      // L.marker(location).addTo(map).openPopup();
+      // L.marker([31.781334945991123, 117.20830678939821]).addTo(map).openPopup();
     //   var popup = L.popup()
     // .setLatLng(location)
     // .setContent('起点')
@@ -105,13 +105,27 @@
 
       // L.circle([31.77358245052529,117.20142960548402], {radius: 5}).addTo(map);
       //
-      var locationP = L.circleMarker(location,{
-        radius:6,//
+      // var locationP = L.circleMarker(location,{
+      //   radius:6,//
+      //   color:'white',
+      //   weight:2,
+      //   fillOpacity:1,
+      //   fillColor:'blue',
+      // }).addTo(map);
+
+
+
+
+      var locationPP = L.circleMarker([
+
+31.7749731607003, 117.20510622886769],{
+        radius:10,//
         color:'white',
         weight:2,
         fillOpacity:1,
         fillColor:'blue',
       }).addTo(map);
+
 
 
      // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
@@ -129,8 +143,8 @@
     watch: {  
       '$route' (to, from) {  
         console.log(this.$store.state.driving_routesLatLng);
-        console.log("this.$store.state.transit_routesLatLng=====")
-        console.log(this.$store.state.transit_routesLatLng);
+        console.log("this.$store.state.driving_routesLatLng=====")
+        console.log(this.$store.state.walking_routesLatLng);
         if(this.$store.state.walking_routesLatLng.length != 0){
           var polyline = L.polyline(this.$store.state.walking_routesLatLng, {color: 'red'}).addTo(map);
           map.fitBounds(polyline.getBounds());

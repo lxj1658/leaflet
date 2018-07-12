@@ -190,24 +190,6 @@
         let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
         let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
         let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin='+ value.start +'&destination='+ value.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-        // let url = 'http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=31.780970,117.209208&output=json&pois=1&ak=nLpN5iKztxIWsPqgwsyrruUG'
-        // let url2 = 'http://api.map.baidu.com/geocoder/v2/?address=合肥南站&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG&callback=showLocation'
-
-        // this.$http.jsonp(url,{},{
-        //   headers:{},
-        //   emulateJson:true}).then((response) => {
-        //     var movie = response.data;
-        //     console.log("===========逆地理检索===========")
-        //     console.log(movie);
-        //   })
-
-        //   this.$http.jsonp(url2,{},{
-        //   headers:{},
-        //   emulateJson:true}).then((response) => {
-        //     var movie = response.data;
-        //     console.log("===========逆地理检索_合肥南站===========")
-        //     console.log(movie);
-        //   })
 
         // 发送请求
         /**
@@ -299,7 +281,7 @@
                 var latlng = changeToLatLng(pathI[j])
                 
                 this.$store.commit(mutationTypes.SET_DRIVING_ROUTESLATLNG,latlng);
-                // latlngs.push(changeToLatLng(pathI[j]));
+                
               }
             }           
           })
@@ -344,7 +326,7 @@
                 var latlng = changeToLatLng(pathI[j])
                 
                 this.$store.commit(mutationTypes.SET_RIDING_ROUTESLATLNG,latlng);
-                // latlngs.push(changeToLatLng(pathI[j]));
+                
               }
             }
           })
@@ -381,7 +363,7 @@
               }else if(hour != 0 && minute != 0){
                 result = hour + '小时' + minute + '分'
               }else if (hour===0 && minute ===0){
-                console.log('时间获取错误==============');
+                console.log('时间获取错误');
               }
               return result;
             }
@@ -469,13 +451,6 @@
                   latlng.push(latlngI);
                 }
               }
-              // console.log(time);
-              // console.log(price);
-              // console.log(bus);
-              // console.log(string);
-              // console.log(latlng);
-              console.log("bususususuusususu")
-              console.log(bus)
               if(bus.length < 2){
                 string.bus = bus[0];
               } else {
@@ -498,8 +473,6 @@
             }
 
           })
-        // var polyline = L.polyline(this.$store.state.driving_routesLatLng, {color: 'red'}).addTo(map);
-        // map.fitBounds(polyline.getBounds());
         this.$router.replace('/main/RouterList')
       },
       show_chose(value){
@@ -531,10 +504,14 @@
            * riding：骑行
            * transit：公交
            */
-          let url_walking = 'http://api.map.baidu.com/direction/v1?mode=walking&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-          let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-          let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
-          let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin='+ this.start +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+          let url_walking = 'http://api.map.baidu.com/direction/v1?mode=walking&origin='+ this.start 
+                            +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+          let url_driving = 'http://api.map.baidu.com/direction/v1?mode=driving&origin='+ this.start 
+                            +'&destination='+ this.end +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+          let url_riding = 'http://api.map.baidu.com/direction/v1?mode=riding&origin='+ this.start +'&destination='+ this.end 
+                            +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
+          let url_transit = 'http://api.map.baidu.com/direction/v1?mode=transit&origin='+ this.start +'&destination='+ this.end 
+                            +'&origin_region=合肥&destination_region=合肥&output=json&ak=nLpN5iKztxIWsPqgwsyrruUG'
         
           /**
            * walking
@@ -560,11 +537,11 @@
                     instruct = instruct.replace('</b>','');
                   }
                   var string = instruct;
-                  
+                  //将路线信息数据保存到state中
                   this.$store.commit(mutationTypes.SET_WALKING_ROUTES, {name:string});
-                }
+              }
 
-              //路径信息(经纬度)
+              //坐标转换
               function changeToLatLng(path){
                 var latlng = path.split(",");
                 var lat = Number(latlng[1]);
@@ -572,11 +549,12 @@
                 var a = GPS.bd_decrypt(lat,lng);
                 return [a.lat,a.lon];
               }
-
+              //路径信息(经纬度)
               for(let i=0;i<path.length;i++){
                 var pathI = path[i].path.split(";");
                 for(let j=0;j<pathI.length;j++){
                   var latlng = changeToLatLng(pathI[j])
+                  //将路径信息数据保存到state中
                   this.$store.commit(mutationTypes.SET_WALKING_ROUTESLATLNG,latlng);
                 }
               }
@@ -626,7 +604,7 @@
 
           /**
            * riding
-           * 驾车线路请求
+           * 骑行线路请求
            */
           this.$http.jsonp(url_riding,{},{
             headers:{},
@@ -846,8 +824,8 @@
           let that = this;
           that.$store.commit(mutationTypes.DEL_STARTSITES);
           var query = val;
-          console.log(query)
-          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query + '&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
+          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query + 
+          '&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
           this.$http.jsonp(url,{},{
             headers:{},
             emulateJson:true}).then((response) =>{
@@ -858,8 +836,6 @@
                   that.$store.commit(mutationTypes.SET_STARTSITES,data.result[i]);
                   that.sites = that.$store.state.startSites;
                 }
-              }else {
-
               }
           })
         }
@@ -869,7 +845,8 @@
           let that = this;
           that.$store.commit(mutationTypes.DEL_ENDSITES);
           var query = val
-          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query+'&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
+          var url = 'http://api.map.baidu.com/place/v2/suggestion?query='+ query+
+          '&region=合肥市&city_limit=true&output=json&ak=YWdGplhYjUGQ3GtpKNeuTM2S' 
           this.$http.jsonp(url,{},{
             headers:{},
             emulateJson:true}).then((response) =>{
@@ -880,8 +857,6 @@
                   that.$store.commit(mutationTypes.SET_ENDSITES,data.result[i]);
                   that.sites = that.$store.state.endSites;
                 }
-              }else {
-
               }
           })
         }

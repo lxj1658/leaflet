@@ -12,7 +12,7 @@ export default {
 
 	startPosition:'',
 	endPosition:'',
-	historyStart:[{name:'合肥工业大学(屯溪路校区)'},{name:'合肥工业大学(翡翠湖校区)'},{name:'合肥南站'},{name:'安徽大学(磬苑校区)'}],
+	historyStart:[{name:'合肥工业大学(屯溪路校区)'},{name:'合肥工业大学(翡翠湖校区)'},{name:'合肥南站'},{name:'安徽大学(磬苑校区)'},{name:'合肥汽车站'},{name:'安徽医科大学'},{name:'安徽医科大学第一附属医院'}],
 	historyEnd:['安徽大学'],
 	startSites:[],//按输入进行地名显示
 	endSites:[],//按输入进行地名显示

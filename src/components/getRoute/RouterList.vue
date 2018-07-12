@@ -21,7 +21,7 @@
       <span style="position: absolute;left: 76%;width: 20%;top:40%" id='walking' @click="choseWalking()">步行</span>
     </div>
     <div class="bottom1" id="bottom1">
-      <!-- <el-button type="primary" style="position: absolute;bottom: 5%;right:5%;z-index: 1010;width: 30%" plain round>开始导航</el-button> -->
+      <el-button type="primary" style="position: absolute;bottom: 5%;right:5%;z-index: 1010;width: 30%" plain round @click="openNavigation()">开始导航</el-button>
       <div>
         <div v-if="transit_chose">
           <div style="background-color: white;z-index: 1010">
@@ -90,6 +90,9 @@
     },
     router: router,
     methods: {
+      openNavigation(){
+        this.$router.push('/main/Navigation')
+      },
       setEndPosition(){
         return this.$store.state.endPosition;
       },
@@ -202,8 +205,7 @@
       '$route' (to, from) {  
         this.start1 = this.$store.state.startPosition;
         this.end1 = this.$store.state.endPosition;
-        console.log("this.$store.state.driving_routesLatLng=====")
-        console.log(this.$store.state.driving_routesLatLng);
+        
         // if(this.$store.state.driving_routesLatLng.length != 0){
         //   var polyline = L.polyline(this.$store.state.driving_routesLatLng, {color: 'red'}).addTo(map);
         //   map.fitBounds(polyline.getBounds());
